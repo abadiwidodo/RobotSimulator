@@ -1,6 +1,6 @@
 # Robot Simulator
 
-<p>Robot Simulator MVC web app will simulate robot movement in a table(5x5) by taking sequences of command strings.</p>
+<p>Toy Robot Simulator MVC web app will simulate robot movement in a table(5x5) by taking sequences of command strings.</p>
 <p>Please enter sequence of robot commands in separate line</p>
 <p>Acceptable command are:</p>
 <ul>
