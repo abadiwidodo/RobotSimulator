@@ -3,16 +3,16 @@ using Robot.Utilities.Logs;
 
 namespace Robot.Models
 {
-    public class NormalRobot : BaseRobot
+    public class ToyRobot : BaseRobot
     {
-        public NormalRobot()
+        public ToyRobot()
         {
             Table = new Table(5,5);
             StringBuilderLogger = new StringBuilderLogger();
             UnitMovement = 1;
         }
 
-        public NormalRobot(Table table, ILogger logger)
+        public ToyRobot(Table table, ILogger logger)
         {
             Table = table;
             StringBuilderLogger = logger;

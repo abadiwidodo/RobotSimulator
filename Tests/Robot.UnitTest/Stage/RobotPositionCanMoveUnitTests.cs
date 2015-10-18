@@ -14,12 +14,12 @@ namespace Robot.UnitTest.Stage
     [TestFixture]
     public class RobotPositionCanMoveUnitTests
     {
-        private readonly NormalRobot _robot;
+        private readonly ToyRobot _robot;
 
         public RobotPositionCanMoveUnitTests()
         {
             //Set robot with table stage 5x5
-            _robot = new NormalRobot(new Table(5, 5), new Mock<ILogger>().Object);
+            _robot = new ToyRobot(new Table(5, 5), new Mock<ILogger>().Object);
         }
 
         [TestCase(0, 0, Direction.North, true)]

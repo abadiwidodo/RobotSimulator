@@ -52,7 +52,7 @@
     <Compile Include="IRobot.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Coordinate.cs" />
-    <Compile Include="NormalRobot.cs" />
+    <Compile Include="ToyRobot.cs" />
     <Compile Include="Stage\IStage.cs" />
     <Compile Include="Stage\Table.cs" />
     <Compile Include="Extensions\StringCommandExtension.cs" />

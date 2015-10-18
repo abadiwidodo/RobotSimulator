@@ -17,7 +17,7 @@ namespace Robot.Web.IntegrationTests
         public void SetUp()
         {
             Table table = new Table(5, 5);
-            robot = new NormalRobot(table, new StringBuilderLogger());
+            robot = new ToyRobot(table, new StringBuilderLogger());
         }
 
         [Test]

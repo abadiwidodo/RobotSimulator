@@ -23,7 +23,7 @@ namespace Robot.Web
             var builder = new ContainerBuilder();
             builder.RegisterControllers(Assembly.GetExecutingAssembly()); //Register MVC Controllers
             builder.RegisterType<StringBuilderLogger>().As<ILogger>();
-            builder.Register(c => new NormalRobot(new Table(5, 5), 
+            builder.Register(c => new ToyRobot(new Table(5, 5), 
                 c.Resolve<ILogger>())).As<IRobot>();
             
             var container = builder.Build();
