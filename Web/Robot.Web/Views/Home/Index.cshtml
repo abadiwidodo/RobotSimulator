@@ -1,0 +1,45 @@
+﻿@model Robot.Web.Models.HomeModel
+
+@{
+    ViewBag.Title = "Robot Simulator";
+}
+<br />
+<br />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Input, htmlAttributes: new { @class = "control-label col-md-1" })
+            <div class="col-md-4">
+                @Html.TextAreaFor(model => model.Input, 10, 40, new { htmlAttributes = new { @class = "form-control" } })
+                <br/>
+                @Html.ValidationMessageFor(model => model.Input, "", new { @class = "text-danger" })
+                <br />
+                <input type="submit" value="Execute" class="btn btn-success" id="btnExecute" />
+            </div>
+            <div class="col-md-7">
+                <p>Please enter sequence of robot commands in separate line</p>
+                <p>Acceptable command are:</p>
+                <ul>
+                    <li>"PLACE x,y,direction" - will put the toy robot on the table in position X,Y and facing NORTH, SOUTH, EAST or WEST</li>
+                    <li>"RIGHT" - rotate robot to right</li>
+                    <li>"LEFT" - rotate robot to left</li>
+                    <li>"MOVE" -  will move the toy robot one unit forward in the direction it is currently facing</li>
+                    <li>"REPORT" - will announce the X,Y and F of the robot</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.Result != null)
+{
+    <div>
+        <p><b>Output</b></p>
+        <div id="divResult">@Html.Raw(Model.Result.Output)</div>
+    </div>
+
+}

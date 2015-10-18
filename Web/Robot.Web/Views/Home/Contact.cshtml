@@ -1,0 +1,32 @@
+﻿@model Robot.Web.Models.HomeModel
+
+@{
+    ViewBag.Title = "Robot Simulator";
+}
+<br/>
+<br/>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Input, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.TextAreaFor(model => model.Input, 10, 40, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Input, "", new { @class = "text-danger" })
+                <br />
+                <input type="submit" value="Execute" class="btn btn-success" id="btnExecute" />
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.Result != null)
+{
+    <div>
+        @Html.Raw(Model.Result.Output)
+    </div>
+
+}
