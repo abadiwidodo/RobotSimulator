@@ -9,7 +9,7 @@ namespace Robot.Models
     /// <summary>
     /// Base robot class
     /// </summary>
-    public abstract class BaseRobot : IRobot
+    public abstract class BaseRobot : IRobot, IPlaceableObject
     {
         public Table Table { get; set; }
         public ILogger StringBuilderLogger { get; set; }
@@ -56,7 +56,7 @@ namespace Robot.Models
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="direction"></param>
-        public void Place(int x, int y, Direction direction)
+        public virtual void Place(int x, int y, Direction direction)
         {
             //check if robot can be move to coordinate x,y
             if (CanMoveTo(x, y))
@@ -64,18 +64,31 @@ namespace Robot.Models
                 //if robot has position then change to the new position and face
                 if (Position != null)
                 {
+                    //first remove obj from current spot
+                    Table.RemoveFromSpot(this);
+
+                    //set to new position
                     Position.Coordinate.X = x;
                     Position.Coordinate.Y = y;
                     Position.Direction = direction;
+
+                    //set robot to spot on the table
+                    Table.AddToSpot(this);
                 }
                 else
                 {
                     //if robot has not been placed before, then instantiate its position
                     Position = new Position(new Coordinate(x, y), direction);
+
+                    //set robot to spot on the table
+                    Table.AddToSpot(this);
                 }
             }
         }
 
+        /// <summary>
+        /// Ask robot to move forward by unit movement
+        /// </summary>
         /// <summary>
         /// Ask robot to move forward by unit movement
         /// </summary>
@@ -87,20 +100,42 @@ namespace Robot.Models
                 //check if robot can move to that direction by unit movement 
                 if (this.CanMoveForward())
                 {
+                    //first remove obj from current spot
+                    Table.RemoveFromSpot(this);
+
+                    //update robot position coordinate
                     MoveActions[Position.Direction](this);
+
+                    //set robot to spot on the table
+                    Table.AddToSpot(this);
                 }
             }
         }
 
         /// <summary>
         /// Validate if robot can move forward
-        /// Robot can move forward if   
+        /// As long as robot is standing on the table and next movement not causing robot fall, then robot can move
         /// </summary>
-        /// <returns></returns>
-        protected virtual bool CanMoveForward()
+        /// <param name="robot"></param>
+        /// <returns>
+        /// true if robot movement not cause the robot to fall
+        /// false if next robot movement cause the robot to fall
+        /// </returns>
+        public virtual bool CanMoveForward()
         {
-            //if new movement not cross the table boundary then it's good
-            return Table.CanMoveForward(this);
+            bool isValid = false;
+
+            //check if there is available spot for the new movement position
+            if (Position.Direction == Direction.North && Table.IsSpotExistAndNotOccupied(Position.Coordinate.X, Position.Coordinate.Y + UnitMovement))
+                isValid = true;
+            else if (Position.Direction == Direction.East && Table.IsSpotExistAndNotOccupied(Position.Coordinate.X + UnitMovement, Position.Coordinate.Y))
+                isValid = true;
+            else if (Position.Direction == Direction.South && Table.IsSpotExistAndNotOccupied(Position.Coordinate.X, Position.Coordinate.Y - UnitMovement))
+                isValid = true;
+            else if (Position.Direction == Direction.West && Table.IsSpotExistAndNotOccupied(Position.Coordinate.X - UnitMovement, Position.Coordinate.Y))
+                isValid = true;
+
+            return isValid;
         }
 
         /// <summary>
@@ -109,10 +144,10 @@ namespace Robot.Models
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        protected virtual bool CanMoveTo(int x, int y)
+        public virtual bool CanMoveTo(int x, int y)
         {
-            //if new coordinate still within the table boundary then it's good
-            return Table.IsWithinStage(new Coordinate(x, y));
+            //if there is available spot on x,y, then robot can move to that point
+            return Table.IsSpotExistAndNotOccupied(x,y);
         }
 
         protected Dictionary<Direction, Action<BaseRobot>> MoveActions = new Dictionary<Direction, Action<BaseRobot>>

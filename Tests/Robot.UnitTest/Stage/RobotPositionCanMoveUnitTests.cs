@@ -38,7 +38,7 @@ namespace Robot.UnitTest.Stage
         public void Can_Robot_In_Given_Coordinate_Facing_Direction_Move_Forward(int x, int y, Direction direction, Boolean isRobotCanMove)
         {
             _robot.Place(x, y, direction);
-            Assert.IsTrue(_robot.Table.CanMoveForward(_robot) == isRobotCanMove);
+            Assert.IsTrue(_robot.CanMoveForward() == isRobotCanMove);
         }
 
         [TestCase(-1, -1, Direction.North, false)]

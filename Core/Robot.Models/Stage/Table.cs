@@ -1,65 +1,56 @@
-﻿using Robot.Utilities;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Robot.Models.Stage
 {
-    public class Table : IStage<IRobot>
+    /// <summary>
+    /// Table is the stage of placeable object
+    /// </summary>
+    public class Table : IStage<IPlaceableObject>
     {
-        public int Width;
-        public int Height;
-
-        public int MaxXCoordinate
-        {
-            get
-            {
-                return Width - 1;
-            }
-        }
-
-        public int MaxYCoordinate
-        {
-            get
-            {
-                return Height - 1;
-            }
-        }
+        public List<Spot> Spots = new List<Spot>();
 
         public Table(int width, int height)
         {
-            Width = width;
-            Height = height;
+            //create available spots on the table based on width and height
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    Spots.Add(new Spot(x, y));
+                }
+            }
         }
 
         /// <summary>
-        /// As long as robot is standing on the table and next movement not causing robot fall, then robot can move
+        /// Remove obj from current obj's spot
         /// </summary>
-        /// <param name="robot"></param>
-        /// <returns>
-        /// true if robot movement not cause the robot to fall
-        /// false if next robot movement cause the robot to fall
-        /// </returns>
-        public bool CanMoveForward(IRobot robot)
+        /// <param name="obj"></param>
+        public void RemoveFromSpot(IPlaceableObject obj)
         {
-            if (robot.Position.Direction == Direction.North && robot.Position.Coordinate.Y + robot.UnitMovement > MaxYCoordinate)
-                return false;
-            else if (robot.Position.Direction == Direction.East && robot.Position.Coordinate.X + robot.UnitMovement > MaxXCoordinate)
-                return false;
-            else if (robot.Position.Direction == Direction.South && robot.Position.Coordinate.Y - robot.UnitMovement < 0)
-                return false;
-            else if (robot.Position.Direction == Direction.West && robot.Position.Coordinate.X - robot.UnitMovement < 0)
-                return false;
-
-            return true;
+            Spot spot = Spots.FirstOrDefault(s => s.Coordinate.X == obj.Position.Coordinate.X && s.Coordinate.Y == obj.Position.Coordinate.Y);
+            if (spot != null) spot.CurrentObject = null;
         }
 
         /// <summary>
-        /// Check if coordinate x,y within the stage
+        /// add object to new spot
         /// </summary>
-        /// <param name="coordinate"></param>
-        /// <returns></returns>
-        public bool IsWithinStage(Coordinate coordinate)
+        /// <param name="obj"></param>
+        public void AddToSpot(IPlaceableObject obj)
         {
-            return (coordinate.X >= 0 && coordinate.X <= MaxXCoordinate 
-                && coordinate.Y >= 0 && coordinate.Y <= MaxYCoordinate);
+            Spot spot = Spots.FirstOrDefault(s => s.Coordinate.X == obj.Position.Coordinate.X && s.Coordinate.Y == obj.Position.Coordinate.Y);
+            if (spot != null) spot.CurrentObject = obj;
+        }
+
+        /// <summary>
+        /// Check if the spot x,y is exist and not occupied by any placeable object
+        /// </summary>
+        /// <param name="x">x</param>
+        /// <param name="y">y</param>
+        /// <returns>true if spot is available, false if spot is either not exist or occupied by placeable obj</returns>
+        public bool IsSpotExistAndNotOccupied(int x, int y)
+        {
+            return Spots.Any(s => s.Coordinate.X == x && s.Coordinate.Y == y && s.CurrentObject == null);
         }
     }
 }

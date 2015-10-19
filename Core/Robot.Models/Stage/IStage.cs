@@ -3,7 +3,7 @@ namespace Robot.Models.Stage
 {
     public interface IStage<T>
     {
-        bool CanMoveForward(T entity);
-        bool IsWithinStage(Coordinate coordinate);
+        void AddToSpot(T toyRobotMarkTwo);
+        void RemoveFromSpot(T toyRobotMarkTwo);
     }
 }
