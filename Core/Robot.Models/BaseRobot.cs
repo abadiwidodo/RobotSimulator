@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Robot.Models.PlaceableObject;
 using Robot.Models.Stage;
 using Robot.Utilities;
 using Robot.Utilities.Logs;

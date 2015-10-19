@@ -51,6 +51,14 @@ namespace Robot.Models.Command
                         command = new MoveCommand(robot);
                         break;
 
+                    case CommandType.MoveBackward:
+                        command = new MoveBackwardCommand(robot);
+                        break;
+
+                    case CommandType.TurnAround:
+                        command = new TurnAroundCommand(robot);
+                        break;
+
                     case CommandType.Report:
                         command = new ReportCommand(robot);
                         break;

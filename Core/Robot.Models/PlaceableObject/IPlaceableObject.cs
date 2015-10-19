@@ -1,4 +1,4 @@
-﻿namespace Robot.Models
+﻿namespace Robot.Models.PlaceableObject
 {
     public interface IPlaceableObject
     {

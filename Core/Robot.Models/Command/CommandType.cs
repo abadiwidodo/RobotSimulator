@@ -7,6 +7,8 @@
         Right,
         Left,
         Move,
+        MoveBackward, 
+        TurnAround,
         Report
     }
 }
